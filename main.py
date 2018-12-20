@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup
 from slackclient import SlackClient
 from flask import Flask, request, make_response, render_template
 
+from input import *
+
 app = Flask(__name__)
 
 slack_token = ""
