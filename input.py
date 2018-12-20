@@ -1,2 +1,2 @@
-def inputPrepro:
+def inputPrepro():
     pass
