@@ -3,28 +3,19 @@ import json
 import os
 import re
 import urllib.request
-import json
 
 from bs4 import BeautifulSoup
 from slackclient import SlackClient
 from flask import Flask, request, make_response, render_template
 
-from input import *
 app = Flask(__name__)
 
-config = json.load(open("config.json"))
-
-slack_token = config["slack_token"]
-slack_client_id = config["slack_client_id"]
-slack_client_secret = config["slack_client_secret"]
-slack_verification = config["slack_verification"]
-
+slack_token = ""
 sc = SlackClient(slack_token)
 
 # 크롤링 함수 구현하기
 def _crawl_naver_keywords(text):
     text = re.sub(r'<@\S+> ', '', text) #아이디 떼는 코드
-
     url = "http://www.jobkorea.co.kr/Salary/"
     source = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(source, "html.parser")
