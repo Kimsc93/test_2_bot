@@ -17,8 +17,6 @@ def busline(bus_num):
     # for e in driver.find_elements_by_class_name("tab01_content"):
     #     print(e.text)
 
-    print("버스번호 입력 : ", end="")
-    #
 
     driver.find_element_by_id("search-busroute-keyword").send_keys(bus_num)
     bt = driver.find_element_by_tag_name("button")
@@ -27,16 +25,15 @@ def busline(bus_num):
     bt2 = driver.find_element_by_class_name("tab01_box03")
     bt2.click()
     time.sleep(1)
-    load_list = driver.find_element_by_tag_name("ul").text
-    print(type(load_list))
-    # for i in driver.find_elements_by_class_name("tab01_box02_guide"):
-    #     print(i.text)
 
+    result = []
 
-    return load_list
+    for i in driver.find_elements_by_class_name("tab01_box02_guide"):
+        result.append(i.text)
+
+    return result
 
 
 if __name__ == "__main__":
 
-    busline(20)
-    pass
+    print(busline(200))
