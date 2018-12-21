@@ -17,12 +17,13 @@ RESULT =["다시입력", "버스노선 검색", "공지사항 출력", "정거�
 
 def input_pre_processing(user_input):
     numbers = re.findall("\d+", user_input)
-
+    bus_num = 0
 
     if len(numbers) > 1:
         result = 0
     elif len(numbers) == 1:
         result = 1
+        bus_num = numbers[0]
     else:
         for word in CHECK:
             if word in user_input:
@@ -30,7 +31,7 @@ def input_pre_processing(user_input):
                 return result
         result = 2
 
-    return result
+    return result, bus_num
 
 if __name__ == "__main__":
     input_ = "37번 버스 노선 알려줘111"

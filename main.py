@@ -10,9 +10,12 @@ from slackclient import SlackClient
 from flask import Flask, request, make_response, render_template
 
 from input import *
+from busline_seongchan import *
+from busline_dongju import *
+
 app = Flask(__name__)
 
-config = json.load(open("config.json"))
+config = json.load(open("./config.json"))
 
 slack_token = config["slack_token"]
 slack_client_id = config["slack_client_id"]
@@ -24,24 +27,48 @@ sc = SlackClient(slack_token)
 # 크롤링 함수 구현하기
 def _crawl_naver_keywords(text):
     text = re.sub(r'<@\S+> ', '', text) #아이디 떼는 코드
+    #
+    # url = "http://www.jobkorea.co.kr/Salary/"
+    # source = urllib.request.urlopen(url).read()
+    # soup = BeautifulSoup(source, "html.parser")
+    # company = soup.find_all("div", class_="slide")
+    #
+    # i = 0
+    #
+    # if "대기업" in text:
+    #     i = 0
+    # elif "중견기업" in text:
+    #     i = 1
+    # elif "공기업" in text:
+    #     i = 2
+    # else:
+    #     return u'it is not valid url.'
+    #
+    # result = company[i].get_text()[:-10].replace("\n\n\n\n", "\n").replace("\n\n", "\n").replace("\n\n", " ")
+    '''
+    함수 : input_pre_processing
+    매개변수 : user_input (type - string)
+    리턴 값 : 0~2(type - integer)
 
-    url = "http://www.jobkorea.co.kr/Salary/"
-    source = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(source, "html.parser")
-    company = soup.find_all("div", class_="slide")
+    0 = 다시 입력
+    1 = 버스노선 검색
+    2 = 공지사항 출력
+    3 = 정거장 확인
 
-    i = 0
+    '''
+    function_number, bus_num = input_pre_processing(text)
 
-    if "대기업" in text:
-        i = 0
-    elif "중견기업" in text:
-        i = 1
-    elif "공기업" in text:
-        i = 2
+    if(function_number == 0):
+        result = "다시 말해주세요"
+    elif(function_number == 1):
+
+        busload_list = busline(bus_num)
+        result = u'\n'.join(busload_list)
+
     else:
-        return u'it is not valid url.'
 
-    result = company[i].get_text()[:-10].replace("\n\n\n\n", "\n").replace("\n\n", "\n").replace("\n\n", " ")
+        notice_list = notification()
+        result = u'\n'.join(notice_list)
 
     return result
 
